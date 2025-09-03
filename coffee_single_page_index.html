@@ -11,15 +11,137 @@
   <meta property="og:description" content="ミルクたっぷりカフェオレ / こだわりのコーヒー。営業時間・メニュー・地図。" />
   <meta property="og:image" content="" />
   <meta name="theme-color" content="#121212" />
+  <link rel="icon" href="#" id="favicon-link">
   <style>
-    /* （スタイルは前回のまま） */
+    :root{
+      --bg:#121212;            /* 背景（渋い黒） */
+      --panel:#1a1a1a;         /* カード背景 */
+      --ink:#e8e5e0;           /* 文字色（生成り） */
+      --mute:#a6a29a;          /* 補助テキスト */
+      --accent:#c2a27a;        /* コーヒー色アクセント */
+      --accent-2:#7a5f42;      /* 深いコーヒー色 */
+      --line:#2a2a2a;          /* 罫線 */
+      --radius:18px;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --max:1040px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Noto Sans JP", Meiryo, sans-serif;
+      background:
+        radial-gradient(1200px 500px at 10% -10%, rgba(194,162,122,.08), transparent 60%),
+        radial-gradient(700px 400px at 90% -20%, rgba(122,95,66,.08), transparent 60%),
+        #121212;
+      color: var(--ink);
+      line-height:1.7;
+      letter-spacing:.02em;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    a{color:var(--ink); text-decoration: none}
+    a:hover{opacity:.92}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 20px}
+
+    /* ヘッダー */
+    header{position:sticky; top:0; z-index:30; backdrop-filter: blur(6px);
+      background: color-mix(in oklab, var(--bg) 70%, #000 30% / .6);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav{display:flex; gap:16px; align-items:center; justify-content:space-between; padding:12px 0}
+    .brand{display:flex; align-items:center; gap:12px; font-weight:700;}
+    .logo{
+      width:36px; height:36px; border-radius:9px; display:inline-grid; place-items:center;
+      background: conic-gradient(from 180deg at 50% 50%, var(--accent) 0 25%, var(--accent-2) 25% 50%, #333 50% 75%, #222 75% 100%);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.04), var(--shadow);
+      overflow:hidden;
+    }
+    .logo svg{width:26px; height:26px}
+    .brand span{font-weight:800; letter-spacing:.06em}
+    nav ul{list-style:none; display:flex; gap:18px; margin:0; padding:0}
+    nav a{color:var(--mute)}
+    nav a:hover{color:var(--ink)}
+
+    /* ヒーロー */
+    .hero{position:relative; isolation:isolate; overflow:hidden;
+      padding: clamp(56px, 8vw, 100px) 0 56px;
+      background:
+        radial-gradient(1000px 500px at 15% -10%, rgba(194,162,122,.18), transparent 60%),
+        radial-gradient(500px 400px at 85% -25%, rgba(122,95,66,.2), transparent 60%),
+        linear-gradient(180deg, #141414, #0e0e0e);
+      border-bottom:1px solid var(--line);
+    }
+    .hero h1{font-size: clamp(28px, 6vw, 56px); line-height:1.15; margin:0 0 12px; letter-spacing:.02em}
+    .hero p{color:var(--mute); margin:0 0 24px}
+    .badges{display:flex; gap:10px; flex-wrap:wrap}
+    .badge{border:1px solid var(--accent); color:var(--ink); padding:8px 12px; border-radius:999px; font-size:14px; background: #1a1510}
+    .cta{display:flex; gap:12px; margin-top:18px; flex-wrap:wrap}
+    .btn{padding:12px 16px; border-radius:12px; border:1px solid var(--accent);
+      background: linear-gradient(180deg, #2a2118, #1e1a15);
+      color:var(--ink); font-weight:600; box-shadow: var(--shadow)}
+    .btn--ghost{background: transparent; border-color: var(--line); color:var(--mute)}
+
+    /* セクション */
+    section{padding:48px 0; border-bottom:1px solid var(--line)}
+    h2{font-size: clamp(20px, 3.6vw, 28px); margin:0 0 18px}
+    .grid{display:grid; gap:18px}
+    @media (min-width: 860px){.grid-2{grid-template-columns: 1fr 1fr} .grid-3{grid-template-columns: repeat(3, 1fr)}}
+
+    .card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px}
+    .card h3{margin:0 0 12px}
+    .muted{color:var(--mute)}
+    .tag{display:inline-block; font-size:12px; color:var(--mute); border:1px solid var(--line); padding:4px 8px; border-radius:999px}
+
+    /* テーブル風レイアウト */
+    .kv{display:grid; grid-template-columns: 140px 1fr; gap:8px; align-items:start}
+    .kv div{padding:6px 0; border-bottom:1px dashed var(--line)}
+    .kv div:nth-child(odd){color:var(--mute)}
+
+    /* メニュー表 */
+    .menu{width:100%; border-collapse: collapse}
+    .menu th, .menu td{border-bottom:1px dashed var(--line); padding:12px 0}
+    .menu th{text-align:left; color:var(--mute); font-weight:600}
+    .menu .price{text-align:right; white-space:nowrap}
+    .note{font-size:13px; color:var(--mute)}
+
+    /* マップ */
+    .map{aspect-ratio:16/9; width:100%; border:0; border-radius:var(--radius); filter:grayscale(.2) contrast(1.05)}
+
+    /* フッター */
+    footer{padding:40px 0; color:var(--mute)}
+    .footer-inner{display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+    .sns{display:flex; gap:10px}
+    .sns a{border:1px solid var(--line); padding:6px 10px; border-radius:999px}
+
+    /* 英字ロゴマーク（ウォーターマーク）*/
+    .watermark{position:absolute; inset:auto 0 0 auto; right:-6vw; bottom:-3vw; opacity:.06; pointer-events:none}
+    .watermark svg{width:min(46vw, 520px); height:auto; filter:drop-shadow(0 8px 32px rgba(0,0,0,.5))}
+
+    /* アニメーション */
+    [data-raise]{transform:translateY(6px); opacity:0; animation:up .8s ease forwards}
+    [data-raise="2"]{animation-delay:.12s}
+    [data-raise="3"]{animation-delay:.24s}
+    @keyframes up{to{transform:none; opacity:1}}
   </style>
 </head>
 <body>
   <header>
     <div class="wrap nav">
       <a class="brand" href="#top" aria-label="イグオコーヒー">
-        <span class="logo" aria-hidden="true">☕</span>
+        <span class="logo" aria-hidden="true">
+          <!-- シンプルな“コーヒー豆”ロゴ（SVG） -->
+          <svg viewBox="0 0 64 64" role="img" aria-label="Iguo Coffee Logo">
+            <defs>
+              <linearGradient id="g" x1="0" x2="1">
+                <stop offset="0" stop-color="#c2a27a"/>
+                <stop offset="1" stop-color="#7a5f42"/>
+              </linearGradient>
+            </defs>
+            <path fill="url(#g)" d="M45 8c7 7 9 16 5 27s-11 17-22 21c-11 3-19-2-22-13S8 19 19 11s19-6 26-3Z"/>
+            <path fill="none" stroke="#1a1a1a" stroke-width="4" stroke-linecap="round" d="M28 10c6 8 6 16 0 24"/>
+          </svg>
+        </span>
         <span>イグオコーヒー</span>
       </a>
       <nav aria-label="主要ナビゲーション">
@@ -49,6 +171,12 @@
           </div>
         </div>
       </div>
+      <!-- 右下に薄いロゴの透かしで“雰囲気”を追加 -->
+      <div class="watermark" aria-hidden="true">
+        <svg viewBox="0 0 640 220">
+          <text x="0" y="150" font-family="'Times New Roman', serif" font-size="160" font-weight="700" fill="#e8e5e0">IGUO COFFEE</text>
+        </svg>
+      </div>
     </section>
 
     <section id="about">
@@ -69,7 +197,52 @@
       </div>
     </section>
 
-    <!-- メニュー、営業時間、アクセス等は前回同様 -->
+    <section id="menu">
+      <div class="wrap">
+        <h2>メニュー</h2>
+        <div class="card">
+          <table class="menu" aria-describedby="menu-note">
+            <thead>
+              <tr>
+                <th>ドリンク</th>
+                <th class="price">税込</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>ミルクたっぷりカフェオレ（Hot/Ice）</td><td class="price">¥650</td></tr>
+              <tr><td>本日のコーヒー（ハンドドリップ）</td><td class="price">¥550</td></tr>
+              <tr><td>カフェラテ / アメリカーノ</td><td class="price">¥600</td></tr>
+              <tr><td>シングルオリジン（店主おすすめ）</td><td class="price">¥700</td></tr>
+              <tr><td>自家製カフェモカ</td><td class="price">¥680</td></tr>
+            </tbody>
+          </table>
+          <p id="menu-note" class="note">＋¥100でミルク増し。豆の個性に合わせて抽出いたします。テイクアウト可。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="hours">
+      <div class="wrap grid grid-2">
+        <div class="card" data-raise="1">
+          <h2>営業時間</h2>
+          <div class="kv" aria-label="営業時間表">
+            <div>平日</div><div>10:00 – 19:00（L.O. 18:30）</div>
+            <div>土日祝</div><div>9:00 – 18:00（L.O. 17:30）</div>
+            <div>定休日</div><div>水曜</div>
+          </div>
+          <p class="note">豆売りは営業時間内いつでも。売り切れの際はご容赦ください。</p>
+        </div>
+        <div class="card" data-raise="2">
+          <h3>ご予約・お問い合わせ</h3>
+          <p>お席の確保や豆の取り置きはお気軽にどうぞ。</p>
+          <p>
+            <a href="tel:000-0000-0000" class="btn" aria-label="電話番号に発信">☎ 000-0000-0000</a>
+            <a href="mailto:info@example.com" class="btn btn--ghost" aria-label="メールで問い合わせ">✉ info@example.com</a>
+          </p>
+          <p class="note">SNSのダイレクトメッセージでも承ります。</p>
+        </div>
+      </div>
+    </section>
 
     <section id="access">
       <div class="wrap grid grid-2">
@@ -84,6 +257,7 @@
         </div>
         <div class="card" data-raise="2">
           <div role="img" aria-label="地図">
+            <!-- Google マップ埋め込み：公開時に実住所に差し替え -->
             <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.953203318146!2d139.76712591525886!3d35.681236180193624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDQwJzUxLjAiTiAxMznCsDQ2JzAxLjYiRQ!5e0!3m2!1sja!2sjp!4v1700000000000" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
         </div>
@@ -109,6 +283,7 @@
   </footer>
 
   <script>
+    // 年号自動更新・スムーススクロール
     document.getElementById('year').textContent = new Date().getFullYear();
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click', e=>{
@@ -116,13 +291,20 @@
         if(id.length>1){ e.preventDefault(); document.querySelector(id).scrollIntoView({behavior:'smooth'}); }
       });
     });
+
+    // SVGファビコンを自動生成（別ファイル不要）
+    const favSVG = encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' x2='1'><stop offset='0' stop-color='#c2a27a'/><stop offset='1' stop-color='#7a5f42'/></linearGradient></defs><rect width='64' height='64' rx='12' fill='#121212'/><path fill='url(#g)' d='M45 8c7 7 9 16 5 27s-11 17-22 21c-11 3-19-2-22-13S8 19 19 11s19-6 26-3Z'/><path fill='none' stroke='#1a1a1a' stroke-width='5' stroke-linecap='round' d='M28 10c6 8 6 16 0 24'/></svg>`);
+    const fav = document.getElementById('favicon-link');
+    fav.href = `data:image/svg+xml,${favSVG}`;
   </script>
 
+  <!-- 構造化データ（公開時に実データへ変更） -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "CafeOrCoffeeShop",
     "name": "イグオコーヒー",
+    "image": "",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "熊本県八代市〇〇町 1-2-3 ○○ビル1F",
